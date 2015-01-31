@@ -145,5 +145,49 @@ public class OrderQueueTest {
         assertNull(order1);
             
         }
+     
+      @Test
+      void testWhenRequestToProcessOrderWhenThereIsTimeRecievedAndAllPurchasesAreInStockThenTimeProcessedIsNow() {
+        OrderQueue orderQueue = new OrderQueue();
+        Order order = new Order("CUST00001", "ABC Construction");
+        order.addPurchase(new Purchase("PROD0004", 450));
+        order.addPurchase(new Purchase("PROD0006", 250));
+        try {
+            orderQueue.add(order);
+            orderQueue.processOrder();
+        }catch(Exception ex)
+        {
+            System.out.println("Exception");
+        }
+        
+        long expResult = new Date().getTime();
+        long result = order.getTimeProcessed().getTime();
+        assertTrue(Math.abs(result - expResult) < 1000);
+      }
+      
+      
+      @Test
+      void testWhenRequestToProcessOrderWhenThereIsNoTimeRecievedThenThrowException() {
+        boolean result=false;
+        try {
+        OrderQueue orderQueue = new OrderQueue();
+        Order order = new Order("CUST00001", "ABC Construction");
+        order.addPurchase(new Purchase("PROD0004", 450));
+        order.addPurchase(new Purchase("PROD0006", 250));
+        orderQueue.add(order);
+        try {
+        orderQueue.processOrder();
+        } catch (noTimeRecievedException ntre)
+        {
+            System.out.println("No Time Recieved");
+            result = true;
+        }
+        } catch (Exception ex)
+        {
+            System.out.println("Exception");
+        }
+        assertTrue(result);
+        
+      }
     
 }
