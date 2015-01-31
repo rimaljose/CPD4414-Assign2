@@ -120,5 +120,30 @@ public class OrderQueueTest {
         }
     }
     
+    @Test 
+        void testWhenRequestForNextOrderWhenOrdersExistsThenReturnTimeRecievedWithNoTimeProcessed() {
+        OrderQueue orderQueue = new OrderQueue();
+        Order order = new Order("CUST00001", "ABC Construction");
+        order.addPurchase(new Purchase("PROD0004", 450));
+        order.addPurchase(new Purchase("PROD0006", 250));
+        try {
+            orderQueue.add(order);
+        } catch (noCustomerException ex) {
+            Logger.getLogger(OrderQueueTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (noPurchasesException ex) {
+            Logger.getLogger(OrderQueueTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Order order1 = orderQueue.nextOrder();
+        assertEquals(order1, order);
+        
+    }
+    
+     @Test 
+     void testWhenRequestForNextOrderWhenNoOrdersExistsThenReturnNull() {
+        OrderQueue orderQueue = new OrderQueue();
+        Order order1 =orderQueue.nextOrder();
+        assertNull(order1);
+            
+        }
     
 }
