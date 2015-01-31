@@ -79,7 +79,46 @@ public class OrderQueueTest {
         assertTrue(Math.abs(result - expResult) < 1000);
     }
     
+    @Test
+    public void testWhenNoCustomerExistsThenThrowException() {
+        boolean result=false;
+        try {
+        OrderQueue orderQueue = new OrderQueue();
+        Order order = new Order("", "");
+        order.addPurchase(new Purchase("PROD0004", 450));
+        order.addPurchase(new Purchase("PROD0006", 250));
+        orderQueue.add(order);
+        
+        } catch(noCustomerException nce) 
+                { 
+                    result=true; 
+                }
+        catch (noPurchasesException npe)
+        {
+            System.out.println("No Purchases Exists");
+        }
+        assertTrue(result);
+        
+    }
     
+    @Test
+    public void testWhenNoPurchasesThenThrowException() {
+        boolean result=false;
+        try {
+        OrderQueue orderQueue = new OrderQueue();
+        Order order = new Order("CUST00001", "ABC Construction");
+        order.addPurchase(new Purchase("", 0));
+        order.addPurchase(new Purchase("", 0));
+        orderQueue.add(order);
+        } catch(noPurchasesException npe)
+        {
+            result=true;
+        }
+        catch (noCustomerException nce)
+        {
+            System.out.println("Customer ID and Customer Name Doesnot Exists");
+        }
+    }
     
     
 }
