@@ -17,7 +17,9 @@
 package cpd4414.assign2;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Queue;
 
 /**
@@ -26,9 +28,58 @@ import java.util.Queue;
  */
 public class OrderQueue {
     Queue<Order> orderQueue = new ArrayDeque<>();
+    List<Process> processList = new ArrayList<>();
     
-    public void add(Order order) {
+    public void add(Order order) throws noCustomerException, noPurchasesException {
+        
+        if(order.getCustomerId().isEmpty())
+        {
+            throw new noCustomerException();
+        }
+        else if(order.getListOfPurchases().isEmpty())
+        {
+            throw new noPurchasesException();
+        }
+        else
+        {
         orderQueue.add(order);
         order.setTimeReceived(new Date());
+        }
+    }
+    
+    public Order nextOrder()
+    {
+        return orderQueue.peek();
+    }
+    
+    public void processOrder() throws noTimeRecievedException
+    {
+        Order order1 = orderQueue.remove();
+        if(order1.getTimeReceived() == null)
+        {
+            throw new noTimeRecievedException();
+        }
+        else
+        {
+            order1.setTimeProcessed(new Date());
+        }
+    }
+
+    public static class noCustomerException extends Exception {
+
+        public noCustomerException() {
+        }
+    }
+
+    public static class noPurchasesException extends Exception {
+
+        public noPurchasesException() {
+        }
+    }
+
+    public static class noTimeRecievedException extends Exception {
+
+        public noTimeRecievedException() {
+        }
     }
 }

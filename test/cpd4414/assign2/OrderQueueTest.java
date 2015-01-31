@@ -16,10 +16,15 @@
 
 package cpd4414.assign2;
 
-import cpd4414.assign2.OrderQueue;
-import cpd4414.assign2.Purchase;
 import cpd4414.assign2.Order;
+import cpd4414.assign2.OrderQueue;
+import cpd4414.assign2.OrderQueue.noCustomerException;
+import cpd4414.assign2.OrderQueue.noPurchasesException;
+import cpd4414.assign2.OrderQueue.noTimeRecievedException;
+import cpd4414.assign2.Purchase;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
@@ -58,11 +63,23 @@ public class OrderQueueTest {
         Order order = new Order("CUST00001", "ABC Construction");
         order.addPurchase(new Purchase("PROD0004", 450));
         order.addPurchase(new Purchase("PROD0006", 250));
+        try {
         orderQueue.add(order);
+        }catch(noCustomerException nce)
+        {
+            System.out.println("Customer ID and Customer Name Doesnot Exists");
+        }
+        catch (noPurchasesException npe)
+        {
+            System.out.println("No Purchases Exists");
+        }
         
         long expResult = new Date().getTime();
         long result = order.getTimeReceived().getTime();
         assertTrue(Math.abs(result - expResult) < 1000);
     }
+    
+    
+    
     
 }
